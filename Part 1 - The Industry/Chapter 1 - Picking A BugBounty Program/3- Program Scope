@@ -1,0 +1,20 @@
+- A program’s scope on its policy pages specifies what and how you are allowed to hack. There are two types of scopes: asset and vulnerability. The asset scope tells you which subdomain, products, and applications you can hack. And the vulnerability scope specifies which vulnerabilities the company will accept as valid bugs
+
+- Any program with large asset and vulnerability scopes is a good place to start for a beginner. 
+The larger the asset scope, the larger the number of target applications and web pages you can look at. When a program has a big asset scope
+
+- Payout Amounts : There are two types of payment programs: vulnerability disclosure programs (VDPs) and bug bounty programs
+
+1- VDPs are reputation-only programs, meaning they do not pay for findings but often offer rewards such as reputation points and swag, They are
+a great way to learn about hacking if making money is not your primary objective
+
+2- bug bounty programs offer varying amounts of monetary rewards for your findings. In general, the more severe the vulnerability, the more the report will pay. But different programs have different payout averages for each level of severity.
+
+- Consider the program’s average response time. Some companies will handle and resolve your reports within a few days, while others take weeks or even months to finalize their fixes. 
+Delays often happen because of the security team’s internal constraints, like a lack of personnel to handle reports, a delay in issuing security patches, and a lack of funds to timely
+reward researchers.
+
+- Public Programs : are those that are open to all; anyone can hack and submit bugs to these programs, as long as they abide by the laws and the bug
+bounty program’s policies
+
+- Private Programs : are open to only invited hackers. companies ask hackers with a certain level of experience and a proven track record to attack the company and submit bugs to it

@@ -1,0 +1,23 @@
+- Finding the right program to target is the first step to becoming a successful bug bounty hunter
+
+- What is a BugBounty program? A bug bounty program is an initiative in which a company invites hackers to attack its products and service offerings.
+
+- Bug bounties are currently one of the most popular ways for organizations to receive feedback about security bugs
+
+- Anything labeled social has a lot of potential for vulnerabilities, because these applications tend to be complex and involve a lot of interaction among
+users, and between the user and the server
+
+- General web applications are also a good target for beginners. Here, I am referring to any web applications that do not involve user-to-user interaction. Instead, users interact with the server to access the application’s features.
+
+- Hacking mobile applications requires the skill set you’ve built from
+hacking web applications, as well as additional knowledge about the structure of mobile apps and programming techniques related to the platform. You should understand attacks and analysis strategies like certificate pinning bypass, mobile reverse engineering, and cryptography.
+
+- Application programming interfaces (APIs) are specifications that define how other applications can interact with an organization’s assets, such as to
+retrieve or alter their data, to retrieve an application’s data via HyperText Transfer Protocol (HTTP) messages to a certain endpoint, and the application will return data in the format of Extensible Markup Language (XML) or JavaScript Object Notation (JSON) message
+
+- If you have more advanced programming and reversing skills, you can give source code and executable programs a try. These programs encourage hackers to find vulnerabilities in an organization’s software by directly providing
+hackers with an open source codebase or the binary executable
+
+
+
+

@@ -1,0 +1,37 @@
+- Once you’ve submitted your report, the security team will classify it into a report state, which describes the current status of your report. 
+The report state will change as the process of mitigation moves forward.
+
+- Need More Information : This means the security team didn’t fully understand your report, or couldn’t
+reproduce the issue by using the information you’ve provided, In this case, you should revise your report, provide any missing infor-
+mation, and address the security team’s additional concerns.
+
+- Informative : They won’t fix the bug. This means they believe the issue you reported is a security concern but not significant enough to warrant a fix, In this case, there’s nothing more you can do for the report! The company won’t pay you a bounty, and you don’t have to follow up, unless you believe the security team made a mistake
+
+- Duplicate : Means another hacker has already found the bug, and the company is in the process of remediating the vulnerability.
+
+- N/A (Not Applicable): Means your report doesn’t contain a valid security issue with security implications. This might happen when your report
+contains technical errors, or if the bug is intentional application behavior
+
+- Triaged : They’ve validated the report on their end. This is great news for you, because this usually means the security
+team is going to fix the bug and reward you with a bounty
+
+- Resolved : The reported vulnerability has been fixed. At this point, pat yourself on the back and rejoice in the fact that
+you’ve made the internet a little safer. If you are participating in a paid bug bounty program, you can also expect to receive your payment at this point! There’s nothing more to do with the report besides celebrate and continue hacking.
+
+- Understanding Why You’re Failing : 
+1- You Participate in the Wrong Programs -> You might have been targeting the wrong programs all along. Bug bounty programs aren’t created equall
+Some programs delay fixing bugs because they lack the resources to deal with reports. Some programs downplay the severity of vulnerabilities to avoid paying hackers, You can identify these programs by reading publicly disclosed reports, analyzing program statistics on bug bounty platforms, or by talking with other hackers.
+
+2- You Don’t Stick to a Program -> How long should you target a program? If your answer is a few hours or days, that’s the reason you’re not finding anything. Jumping from program to program is another mistake beginners often make. Every bug bounty program has countless bug bounty hunters hacking it. Differentiate yourself from the competition, or risk not finding anything! You can differentiate yourself in two ways: dig deep or search wide. For example, dig deep into a single functionality of an application to search for complex bugs. Or discover and hack the lesser-known assets of the company. Doing these things well takes time. Don’t expect to find bugs right away when you’re starting fresh on a program. And don’t quit a program if you can’t find bugs on the first day.
+
+3- You Don’t Recon -> Jumping into big public programs without performing reconnaissance is another way to fail at bug bounties, Spending time on recon gives you an incredible advantage over other hackers, because you’ll be the first to notice the bugs on all obscure assets you discover, giving you better chances of finding bugs that aren’t duplicates
+
+- You Go for Only Low-Hanging Fruit -> Avoid looking for only the obvious bug types. Simplistic bugs on big targets have probably already been found
+strive to gain a deeper understanding of the application’s underlying architecture and logic. From there, you can develop a unique testing methodology that will result in more unique and valuable bugs
+
+- What to do when you're stuck :
+1- Step 1: Take a Break! -> Take a break. Hacking is hard work. Unlike what they show in the movies, hunting for vulnerabilities is tedious and difficult. It requires patience, persistence, and an eye for detail, so it can be very mentally draining
+
+2- Step 2: Build Your Skill Set -> Learning new skills will get you out of your comfort zone and strengthen your hacker skills for the future
+
+3- Step 3: Gain a Fresh Perspective -> First, hacking on a single target can get boring, so diversify your targets instead of focusing on only one. I’ve always found it helpful to have a few targets to alternate between. When you’re getting tired of one application, switch to another, and come back to the first one later. Second, make sure you’re looking for specific things in a target instead of wandering aimlessly, searching for anything. Make a list of the new skills you’ve learned and try them out. Look for a new kind of bug, or try out a new recon angle. Then, rinse and repeat until you find a suitable new workflow. Finally, remember that hacking is not always about finding a single vulnerability but combining several weaknesses of an application into something critical

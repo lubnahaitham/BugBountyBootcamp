@@ -1,0 +1,23 @@
+- Companies can host bug bounty programs in two ways: bug bounty platforms
+and independently hosted websites. Bug bounty platforms are websites through which many companies host their programs. Usually, the platform directly awards hackers with reputation points and money for their results
+
+- Some of the largest bug bounty platforms are HackerOne, Bugcrowd, Intigriti, Synack, and Cobalt.
+
+- On the other hand, many organizations host and manage their bug bounty programs without the help of platforms. Companies like Google, Facebook, Apple, and Medium do this. You can find their bug bounty policy
+pages by visiting their websites, or by searching “CompanyName bug bounty program” online.
+
+- The Pros : 
+1- The best thing about bug bounty platforms is that they provide a lot of transparency into a company’s process, because they post disclosed reports,
+metrics about the programs’ triage rates, payout amounts, and response times. 
+
+2- Bug bounty programs also often have reputation systems that allow you to showcase your experience so you can gain access to invite-only bug bounty programs.
+
+3- Another pro of bug bounty platforms is that they often step in to provide conflict resolution and legal protection as a third party. 
+If you submit a report to a non-platform program, you have no recourse in the final bounty decision.
+
+- The Cons : 
+1- some hackers avoid bug bounty platforms because they dislike how those platforms deal with reports. Reports submitted to platform managed bug bounty programs often get handled by triagers, third-party employees who often aren’t familiar with all the security details about a company’s product
+
+2- public programs on bug bounty platforms are often crowded, because the platform gives them extra exposure. On the other hand, many privately hosted programs don’t get as much attention from hackers and are thus less competitive. 
+
+3- And for the many companies that do not contract with bug bounty platforms, you have no choice but to go off platforms if you want to participate in their programs

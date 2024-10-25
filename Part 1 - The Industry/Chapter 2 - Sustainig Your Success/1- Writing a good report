@@ -1,0 +1,61 @@
+- Even if you understand the technical information in this book, you may have difficulty navigating the nuances of bug bounty programs. 
+Or you might be struggling to actually locate legitimate bugs and aren’t sure why you’re stuck
+
+- A bug bounty hunter’s job isn’t just finding vulnerabilities; it’s also explaining them to the organization’s security team. 
+If you provide a well-written report, you’ll help the team you’re working with reproduce the exploit, assign it to
+the appropriate internal engineering team, and fix the issue faster.
+
+- Step 1: Craft a Descriptive Title :
+The first part of a great vulnerability report is always a descriptive title. Aim for a title that sums up the issue in one sentence.
+Ideally, it should allow the security team to immediately get an idea of what the vulnerability is, where it occurred, and its potential severity. To do so, it should answer the following questions: What is the vulnerability you’ve found? Is it an instance of a well-
+known vulnerability type, such as IDOR or XSS? Where did you find it on the target application?
+
+"For example, IDOR on https://example.com/change_password Leads to Account Takeover for All Users."
+
+- Step 2: Provide a Clear Summary :
+Provide a report summary. This section includes all the relevant details you weren’t able to communicate in the title, like the HTTP request param-
+eters used for the attack, how you found it, and so on.
+A good report summary is clear and concise. It contains all the information needed to understand a vulnerability, including what the bug is, where
+the bug is found, and what an attacker can do when it’s exploited.
+
+"For example, The https://example.com/change_password endpoint takes two POST body parameters: user_id and new_password. A POST request
+to this endpoint would change the password of user user_id to new_password. This endpoint is not validating the user_id parameter, and as a result, any user can change anyone else’s password by manipulating the user_id parameter."
+
+- Step 3: Include a Severity Assessment :
+Your report should also include an honest assessment of the bug’s severity.
+In addition to working with you to fix vulnerabilities, security teams have other responsibilities to tend to. 
+Including a severity assessment will help them prioritize which vulnerabilities to fix first, and ensure that they take care of critical vulnerabilities right away.
+
+1.Low severity -> The bug doesn’t have the potential to cause a lot of damage.
+2.Medium severity -> The bug impacts users or the organization in a moderate way, or is a high-severity issue that’s difficult for a malicious hacker to exploit.
+3.High severity -> The bug impacts a large number of users, and its consequences can be disastrous for these users. 
+4.Critical severity -> The bug impacts a majority of the user base or endangers the organization’s core infrastructure.
+
+"The security team should focus on high- and critical-severity bugs first."
+
+- For a general idea of how critical each type of vulnerability is : Common Vulnerability Scoring System (CVSS) at https://www.first.org/cvss/
+
+- Step 4: Give Clear Steps to Reproduce :
+Provide step-by-step instructions for reproducing the vulnerability.
+Include all relevant setup prerequisites and details you can think of. It’s best to assume the engineer on the other side has no knowledge of the vulnerability and doesn’t know how the application works.
+By providing many relevant details, you can avoid any misunderstanding and speed up the mitigation process
+
+
+- Step 5: Provide a Proof of Concept :
+For more complex vulnerabilities, it’s helpful to include a video, screenshots, or photos documenting your exploit, called a proof-of-concept (POC) file
+POC files like these save the security team time because they won’t have to prepare the attack payload themselves. You can also include any crafted
+URLs, scripts, or upload files you used to attack the application
+
+- Step 6: Describe the Impact and Attack Scenarios :
+To help the security team fully understand the potential impact of the vulnerability, you can also illustrate a plausible scenario in which the vulnerability could be exploited.
+Put yourself in a malicious hacker’s shoes and try to escalate the impact of the vulnerability as much as possible. Give the client company a realistic sense of the worst-case scenario. This will help the company prioritize the fix internally and determine if any additional steps or internal investigations are necessary.
+
+- Step 7: Recommend Possible Mitigations :
+You can also recommend possible steps the security team can take to mitigate the vulnerability
+since you’re the security researcher who discovered the vulnerability, you’ll be familiar with the particular behavior of that application
+feature, and thus in a good position to come up with a comprehensive fix
+
+- Step 8: Validate the Report :
+Always validate your report. Go through your report one last time to make sure that there are no technical errors, or anything that might
+prevent the security team from understanding it. Follow your own Steps to Reproduce to ensure that they contain enough details. Examine all of your
+POC files and code to make sure they work. By validating your reports, you can minimize the possibility of submitting an invalid report.

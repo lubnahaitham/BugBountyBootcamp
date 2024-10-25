@@ -1,0 +1,157 @@
+- Reconnaissance is important because it’s how you figure out an application’s attack surface. To look for bugs most efficiently, you need to discover all the possible ways of attacking a target before deciding on the most effective approach.
+
+- Recon skills are what separate a good hacker from an ineffective one.
+
+- Google Dorking (advanced Google searches are a powerful technique that hackers often use to perform recon.) :
+1- site : Tells Google to show you results from a certain site only
+2- inurl : Searches for pages with a URL that match the search string
+3- intitle : Finds specific strings in a page’s title
+4- link : Searches for web pages that contain links to a specified URL
+5- filetype : Searches for pages with a specific file extension
+6- Wildcard (*) : You can use the wildcard operator (*) within searches to mean any character or series of characters.
+7- Quotes (" ") : Adding quotation marks around your search terms forces an exact match
+8- Or (|) : The or operator is denoted with the pipe character (|) and can be used to search for one search term or the other, or both at the same time.
+9- Minus (-) : The minus operator (-) excludes certain search results
+
+- Whois and Reverse Whois : Anyone can then query this information by using the whois command, which searches for the registrant and owner
+information of each known domain
+
+"For example : whois facebook.com"
+
+- This information is not always available, as some organizations and individuals use a service called domain privacy, in which a third-party service provider replaces the user’s information with that of a forwarding service. You could then conduct a reverse WHOIS search, searching a database by using an organization name, a phone number, or an email address to find domains registered with it. This way, you can find all the domains that belong to the same owner. Reverse WHOIS is extremely useful for finding obscure or internal domains not otherwise disclosed to the public. Use a public reverse WHOIS tool like ViewDNS.info (https://viewdns.info/reversewhois/) to conduct this search. WHOIS and reverse WHOIS will give you a good set of top-level domains to work with
+
+- Another way of discovering your target’s top-level domains is to locate IP addresses, Find the IP address of a domain by running the "nslookup" command
+
+"For example: nslookup facebook.com"
+
+- reverse IP lookup. Reverse IP searches look for domains hosted on the same server, given an IP or domain. You can also use ViewDNS.info for this.
+
+"For example : whois 157.240.2.35"
+
+-Another way of finding IP addresses in scope is by looking at autonomous systems, which are routable networks within the public internet. Autonomous system numbers (ASNs) identify the owners of these networks. By checking if two IP addresses share an ASN, you can determine whether the IPs belong to the same owner.
+
+"For example : whois -h whois.cymru.com 157.240.2.20"
+
+- Certifiacte Parsing : 
+ Another way of finding hosts is to take advantage of the Secure Sockets Layer (SSL) certificates used to encrypt web traffic. An SSL certificate’s Subject
+ Alternative Name field lets certificate owners specify additional hostnames that use the same certificate, so you can find those hostnames by parsing this field. 
+ Use online databases like crt.sh, Censys, and Cert Spotter to find certificates for a domain
+
+"For example : DNS:*.facebook.com, DNS:*.facebook.net, DNS:*.fbcdn.net, DNS:*.fbsbx.com, DNS:*.messenger.com"
+
+- Subdomain Enumeration : 
+ After finding as many domains on the target as possible, locate as many subdomains on those domains as you can. Each subdomain represents a new angle for attacking
+ the network. The best way to enumerate sub­domains is to use automation. Tools like Sublist3r, SubBrute, Amass, and Gobuster can enumerate subdomains automatically
+ with a variety of wordlists and strategies.
+
+Gobuster is a tool for brute-forcing to discover subdomains, directories, and files on target web servers.
+
+"For example : gobuster dns -d target_domain -w wordlist"
+
+Altdns tool ( discovers subdomains with names that are permutations of other subdomain names.)
+
+- Service Enumeration :
+ Active scanning, you directly engage with the server, tools like Nmap or Masscan
+ Passive scanning, you use third-party resources to learn about a machine’s ports without interacting with the server, is stealthier and helps attackers avoid
+ detection, websites like shodan. Alternatives to Shodan include Censys and Project Sonar. Combine the information you gather from different databases for the best
+ results. With these databases, you might also find your target’s IP addresses, certificates, and software versions
+ 
+- Directory Brute-Forcing :
+ Finding directories on servers is valuable, because through them, you might discover hidden admin panels, configuration files, password files, outdated
+ functionalities, database copies, and source code files. Directory brute-forcing can sometimes allow you to directly take over a server! Dirsearch or Gobuster for 
+ directory brute-forcing. These tools use wordlists to construct URLs, and then request these URLs from a web server.  Examine 403 pages carefully to see if you can 
+ bypass the protection to access the content.
+ 
+ use a screenshot tool like EyeWitness (https://github.com/FortyNorthSecurity/EyeWitness/) or Snapper (https://github.com/dxa4481/Snapper/) to automatically verify that a page is hosted on each location.
+
+- Spidering the Site :
+ Another way of discovering directories and paths is through web spidering, or web crawling, a process used to identify all pages on a site. A web spider tool starts 
+ with a page to visit. It then identifies all the URLs embedded on the page and visits them. the web spider can uncover many hidden endpoints in an application. 
+ OWASP Zed Attack Proxy (ZAP) at https://www.zaproxy.org/ has a built-in web spider you can use
+ 
+- Third-Party Hosting :
+ Take a look at the company’s third-party hosting footprint S3, which stands for Simple Storage Service, is Amazon’s online storage product. If an organization uses 
+ Amazon S3, its S3 buckets can contain hidden endpoints, logs, credentials, user information, source code, and other information that might be useful to you.
+ 
+ How do you find an organization’s buckets? One way is through Google dorking, as mentioned earlier. Most buckets use the URL format BUCKET.s3.amazonaws.com or 
+ s3.amazonaws.com/BUCKET, so the following search terms are likely to find results: 
+ site:s3.amazonaws.com COMPANY_NAME 
+ site:amazonaws.com COMPANY_NAME
+ 
+ If the company uses custom URLs for its S3 buckets, try more flexible search terms instead. Companies often still place keywords like aws and s3 in their custom 
+ bucket URLs : 
+ amazonaws s3 COMPANY_NAME
+ amazonaws bucket COMPANY_NAME
+ amazonaws COMPANY_NAME
+ s3 COMPANY_NAME
+
+  Public GitHub repositories for S3 URLs. GrayhatWarfare (https://buckets.grayhatwarfare.com/) is an online search engine you can use to find publicly exposed S3 
+  buckets,  It allows you to search for a bucket by using a keyword. Supply keywords related to your target, such as the application, project, or organization name, 
+  to find relevant buckets.
+  You can try to brute-force buckets by using keywords. Lazys3 (https://github.com/nahamsec/lazys3/) is a tool that helps you do this. It relies on a wordlist to 
+  guess buckets that are permutations of common bucket names. Another good tool is Bucket Stream (https://github.com/eth0izzle/bucket-stream/), which parses 
+  certificates belonging to an organization and finds S3 buckets based on permutations of the domain names found on the certificate.
+  
+  Once you’ve found a couple of buckets that belong to the target organization, use the AWS command line tool to see if you can access one, install tool by using 
+  this command : pip install awscli, Then configure it to work with AWS by following Amazon’s documentation at https://docs.aws.amazon.com/cli/latest/userguide/cli-
+  chap-configure.html, Try listing the contents of the bucket you found: aws s3 ls s3://BUCKET_NAME/
+  If this works, see if you can read the contents of any interesting files by copying files to your local machine: 
+  aws s3 cp s3://BUCKET_NAME/FILE_NAME/path/to/local/directory
+  Gather any useful information leaked via the bucket and use it for future exploitation!
+  
+- GitHub Recon : 
+ Search an organization’s GitHub repositories for sensitive data that has been accidentally committed, or information that could lead to the discovery of a 
+ vulnerability. GitHub usernames relevant to your target, GitHub’s search bar, or by checking the GitHub accounts of known employees.
+ For each repository, pay special attention to the Issues and Commits sections. These sections are full of potential info leaks: they could point attackers to 
+ unresolved bugs, problematic code, and the most recent code fixes and security patches.
+ 
+ Look at any protection mechanisms implemented to see if you can bypass them. You can also search the Code section for potentially vulnerable code snippets. Once
+ you’ve found a file of interest, check the Blame and History sections at the top-right corner of the file’s page to see how it was developed.
+ Search the organization’s repositories for terms like key(API, encryption), secret, and password to locate hardcoded user credentials that you can use to access
+ internal systems. After you’ve found leaked credentials, you can use KeyHacks (https://github.com/streaak/keyhacks/) to check if the credentials are valid and
+ learn how to use them to access the target’s services.
+ 
+ You should also search for sensitive functionalities in the project. See if any of the source code deals with important functions such as authentication, password 
+ reset, state-changing actions, or private info reads. Pay attention to code that deals with user input, such as HTTP request parameters, HTTP headers, HTTP request 
+ paths, database entries, file reads, and file uploads. Also, search for old endpoints and S3 bucket URLs that you can attack. Record these files for further review 
+ in the future.
+ 
+ Pay attention to dependencies and imports being used and go through the versions list to see if they’re outdated. Record any outdated dependencies. You can use 
+ this information later to look for publicly disclosed vulnerabilities that would work on your target.
+ Tools like Gitrob and TruffleHog can automate the GitHub recon process. Gitrob (https://github.com/michenriksen/gitrob/) locates potentially sensitive
+ files pushed to public repositories on GitHub. TruffleHog (https://github.com/trufflesecurity/truffleHog/) specializes in finding secrets in repositories by 
+ conducting regex searches and scanning for high-entropy strings.
+ 
+- Other Sneaky open source intelligence (OSINT) Techniques :
+ First, check the company’s job posts for engineering positions. Engineering job listings often reveal the technologies the company uses.
+ If you can’t find relevant job posts, search for employees’ profiles on LinkedIn, and read employees’ personal blogs or their engineering questions on forums like 
+ Stack Overflow and Quora. The expertise of a company’s top employees often reflects the technology used in development. 
+ 
+ Another source of information is the employees’ Google calendars. If the company has an engineering mailing list, sign up for it to gain insight into the company’s 
+ technology and development process. Also check the company’s SlideShare or Pastebin accounts. Pastebin (https://pastebin.com/) is a website for pasting and storing 
+ text online for a short time You might also find uploaded credentials and development comments. automated tools like PasteHunter (https://github.com/kevthehermit/
+ PasteHunter/) to scan for publicly pasted data. Wayback Machine (https://archive.org/web/), a digital record of internet content. Tomnomnom’s tool Waybackurls 
+ (https://github.com/tomnomnom/waybackurls/) can automatically extract end-points and URLs from the Wayback Machine
+ 
+ 
+- Tech Stack Fingerprinting : 
+ Fingerprinting techniques can help you understand the target application even better. Fingerprinting is identifying the software brands and versions that a machine 
+ or an application uses. This information allows you to perform targeted attacks on the application, because you can search for any known misconfigurations and 
+ publicly disclosed vulnerabilities related to a particular version.
+ 
+ The security community classifies known vulnerabilities as Common Vulnerabilities and Exposures (CVEs) and gives each CVE a number for reference. Search for them 
+ on the CVE database (https://cve.mitre.org/cve/search_cve_list.html). Fingerprinting an application using nmap -sV to enbale version detection, in Burp send HTTP 
+ request to the server to check header used to gain insight into the tech stack, like X-Powered-By, X-Generator, X-Drupal-Dynamic-Cache. phrases like powered by, 
+ built with, running.
+ 
+ Wappalyzer (https://www.wappalyzer.com/) is a browser extension that identifies content management systems, frameworks, and programming languages used on a site. 
+ BuiltWith (https://builtwith.com/) is a website that shows you which web technologies a site is built with. StackShare (https://stackshare.io/) is an online 
+ platform that allows developers to share the tech they use, Retire.js is a tool that detects outdated JavaScript libraries and Node.js packages. You can use it to 
+ check for outdated technologies on a site
+ 
+ 
+ 
+ 
+
+  
+  

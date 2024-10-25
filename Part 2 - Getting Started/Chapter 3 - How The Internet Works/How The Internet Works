@@ -1,0 +1,54 @@
+- The internet is composed of two kind of devices: clients and servers. Clients request resources or services, and servers provide those resources and services. When you visit a website with your browser, it acts as a client and requests a web page from a web server. The web server will then send your browser the web page. A web page is nothing more than a collection of resources or files sent by the web server.
+
+- Servers don’t just return web pages to the user, either. Web APIs enable applications to request the data of other systems. This enables applications to interact with each other and share data and resources in a controlled way.
+
+- How do your browser and other web clients know where to find these resources? Well, every device connected to the internet has a unique
+Internet Protocol (IP) address that other devices can use to find it. However, IP addresses are made up of numbers and letters that are hard for humans to remember
+
+- This is where the Domain Name System (DNS) comes in. A DNS server functions as the phone book for the internet, translating domain names into
+IP addresses. When you enter a domain name in your browser, a DNS server must first convert the domain name into an IP address. Our browser asks the DNS server, “Which IP address is this domain located at?”
+
+- After your browser acquires the correct IP address, it will attempt to connect to that IP address via a port. A port is a logical division on devices that identifies a specific network service. We identify ports by their port numbers, which can range from 0 to 65,535.
+Ports allow a server to provide multiple services to the internet at the same time.
+
+- HTTP is a set of rules that specifies how to structure and interpret internet messages, and how web clients and web servers should exchange information
+
+- When your browser wants to interact with a server, it sends the server an HTTP request. There are different types of HTTP requests, and the two most common are GET and POST. By convention, GET requests retrieve data from the server, while POST requests submit data to it. Other common
+HTTP methods include OPTIONS, used to request permitted HTTP methods for a given URL; PUT, used to update a resource; and DELETE, used to delete a resource
+
+- An HTTP status code in the 200 range indicates a successful request. A status code in the 300 range indicates a redirect to another page, whereas the 400 range indicates an error on the client’s part, like a request for a non­ existent page. The 500 range means that the server itself ran into an error.
+
+- As a bug bounty hunter, you should always keep an eye on these status codes, because they can tell you a lot about how the server is operating.
+
+- Content Encoding : Data encoding is used as a way to transfer binary data reliably across machines that have limited support for different content types. Characters used for encoding are common characters not used as controlled characters in internet protocols, Base64 encoding is one of the most common ways of encoding data. It’s often used to transport images and encrypted information within web messages, Hexadecimal encoding, or hex, is a way of representing characters in a base-16 format
+
+"For encode and decode can use : CyberChef https://gchq.github.io/CyberChef/"
+
+- URL encoding is a way of converting characters into a format that is more easily transmitted over the internet. Each character in a URL-encoded
+string can be represented by its designated hex number preceded by a % symbol
+
+"For Url encode and decode https://www.urlencoder.org/"
+
+- Session management is a process that allows the server to handle multiple requests from the same user without asking the user to log in again.
+Websites maintain a session for each logged-in user, and a new session starts when you log in to the website. The server will assign an associated session ID for your browser that serves as proof of your identity. The session ID is usually a long and unpredictable sequence designed to
+be unguessable. When you log out, the server ends the session and revokes the session ID. The website might also end sessions periodically if you don’t manually log out
+
+- Most websites use cookies to communicate session information in HTTP requests. HTTP cookies are small pieces of data that web servers send to your browser. When you log in to a site, the server creates a session for you and sends the session ID to your browser as a cookie. After receiving a
+cookie, your browser stores it and includes it in every request to the same server
+
+- A token-based authentication system stores this info directly in some sort of token. Instead of storing your information server-side and querying it using a session ID, tokens allow servers to deduce your identity by decoding the token itself
+
+- If the server uses information contained in the token to determine the user’s identity, couldn’t users modify the information in the tokens and log in as someone else? To prevent token forgery attacks like these, some applications encrypt their tokens, or encode the token so that it can be read by only the application itself or other authorized parties
+
+- Another more reliable way applications protect the integrity of a token is by signing the token and verifying the token signature when it arrives at the server. Signatures are used to verify the integrity of a piece of data. They are special strings that can be generated only if you know a secret key. Since there is no way of generating a valid signature without the secret key, and only the server knows what the secret key is, a valid signature suggests that the token is probably not altered by the client or any third party. Although the implementations by applications can vary, token-based authentication works like this:
+1. The user logs in with their credentials.
+2. The server validates those credentials and provides the user with a signed token.
+3. The user sends the token with every request to prove their identity.
+4. Upon receiving and validating the token, the server reads the user’s identity information from the token and responds with confidential data
+
+- The JSON Web Token (JWT) is one of the most commonly used types of authentication tokens. It has three components: a header, a payload, and a signature
+
+- The same-origin policy (SOP) is a rule that restricts how a script from one origin can interact with the resources of a different origin. In one sentence, the SOP is this: a script from page A can access data from page B only if the pages are of the same origin. This rule protects modern web applications and prevents many common web vulnerabilities. Two URLs are said to have the same origin if they share the same protocol, hostname, and port numbe
+
+
+

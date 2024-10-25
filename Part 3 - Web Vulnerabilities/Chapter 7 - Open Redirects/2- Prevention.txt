@@ -1,0 +1,11 @@
+- To prevent open redirects, the server needs to make sure it doesn’t redirect users to malicious locations. Sites often implement URL validators to ensure 
+that the user-provided redirect URL points to a legitimate location. These validators use either a blocklist or an allow list. 
+
+- When a validator implements a blocklist, it will check whether the redirect URL contains certain indicators of a malicious redirect, and then block those requests accordingly. For example, a site may blocklist known malicious hostnames or special URL characters often used in open-redirect attacks. When a validator implements an allow list, it will check the hostname portion of the URL to make sure that it matches a predetermined list 
+of allowed hosts. 
+
+- If the hostname portion of the URL matches an allowed hostname, the redirect goes through. Otherwise, the server blocks the 
+redirect.
+
+-These defense mechanisms sound straightforward, but the reality is that parsing and decoding a URL is difficult to get right. Validators often have a hard time identifying the hostname portion of the URL. This makes 
+open redirects one of the most common vulnerabilities in modern web applications. We’ll talk about how attackers can exploit URL validation issues to bypass open-redirect protection

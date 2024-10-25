@@ -1,0 +1,55 @@
+- Encoded IDs and Hashed IDs:
+	- Don’t ignore encoded and hashed IDs. When faced with a seemingly random string, always suspect that it is encoded and try to decode it
+	-  For example, take a look at the IDs of this endpoint:
+	https://example.com/messages?user_id=MTIzNQ
+	https://example.com/messages?user_id=MTIzNg
+	-These user_ids are just the base64url-encoded version of a user’s ID. MTIzNQ is the base64url encoded string of 1235, and MTIzNg is the encoded version of 1236. Some applications use encoding schemes that you can easily reverse. In this case, you can simply encode your false IDs by using an online base64url encoder and executing the IDOR
+	- If the application is using a hashed or randomized ID, see if the ID is predictable. Sometimes applications use algorithms that produce insufficient entropy. Entropy is the degree of randomness of the ID. The higher the entropy of a string, the harder it is to guess
+	- Some IDs don’t have sufficient entropy and can be predicted after careful analysis. In this case, try creating a few accounts to analyze how these IDs are created. You might be able to find a pattern that will allow you to predict IDs belonging to other users
+
+- Leaked IDs:
+	- It might also be possible that the application leaks IDs via another API endpoint or other public pages of the application, like the profile page of a user. I once found an API endpoint that allowed users to retrieve detailed direct messages through a hashed conversation_id value. The request looks like this: GET /messages?conversation_id=O1SUR7GJ43HS93VAR8xxxx
+	- This seems safe at first glance, since the conversation_id is a long, random, alphanumeric sequence. But I later found that anyone could request a list of conversation_ids for each user, just by using their public user ID! The following request would return a list of conversation_ids belonging to that user: GET /messages?user_id=1236
+	- Since the user_id is publicly available on each user’s profile page, I could read any user’s messages by first obtaining their user_id on their profile page, retrieving a list of conversation_ids belonging to that user, and finally loading the messages via their conversation_ids
+
+- Offer the Application an ID, Even If It Doesn’t Ask for One:
+	- In modern web applications, you’ll commonly encounter scenarios in which the application uses cookies instead of IDs to identify the resources a user can access
+	- For example, when you send the following GET request to an endpoint, the application will deduce your identity based on your session cookie, and then send you the messages associated with that user:
+	GET /api_v1/messages
+	Host: example.com
+	Cookies: session=YOUR_SESSION_COOKIE
+	- Since you don’t know another user’s session cookies, you cannot use those session cookies to read their messages. This might make it seem like the application is safe from IDORs. But some applications will implement an alternative way of retrieving resources, using object IDs. They sometimes do this for the convenience of the developers, for backward compatibility, or just because developers forgot to remove a test feature.
+	- If no IDs exist in the application-generated request, try adding one to the request. Append id, user_id, message_id, or other object references to the URL query, or the POST body parameters, and see if it makes a difference to the application’s behavior. For example, say this request displays your messages: GET /api_v1/messages
+	-Then maybe this request would display another user’s messages instead: GET /api_v1/messages?user_id=ANOTHER_USERS_ID
+
+- Keep an Eye Out for Blind IDORs:
+	- Still, sometimes endpoints susceptible to IDOR don’t respond with the leaked information directly. They might lead the application to leak information elsewhere, instead: in export files, email, and maybe even in text 
+alerts. For example, imagine that this endpoint on example.com allows users to email themselves a copy of a receipt:
+	POST /get_receipt
+	(POST request body)
+	receipt_id=3001
+	- This request will send a copy of receipt 3001 to the registered email of the current user. Now, what if you were to request a receipt that belongs to another user, receipt 2983?
+	POST /get_receipt
+	(POST request body)
+	receipt_id=2983
+- While the HTTP response does not change, you may get a copy of receipt 2983 in your email inbox! Often a malicious request can cause an info leak sometime in the future. 
+
+
+- Change the Request Method:
+	- If one HTTP request method doesn’t work, you can try plenty of others instead: GET, POST, PUT, DELETE, PATCH, and so on. Applications often enable multiple request methods on the same endpoint but fail to implement the same 
+access control for each method. For example, if this GET request is not vulnerable to IDOR and doesn’t return another user’s resources GET example.com/uploads/user1236-01.jpeg
+	- you can try to use the DELETE method to delete the resource instead. The DELETE method removes the resource from the target URL: DELETE example.com/uploads/user1236-01.jpeg
+	- If POST requests don’t work, you can also try to update another user’s resource by using the PUT method. The PUT method updates or creates the resource at the target URL:
+	PUT example.com/uploads/user1236-01.jpeg
+	(PUT request body)
+	NEW_FILE
+	- Another trick that often works is switching between POST and GET requests. If there is a POST request like this one
+	POST /get_receipt
+	(POST request body)
+	receipt_id=2983
+	- you can try rewriting it as a GET request, like this:
+	GET /get_receipt?receipt_id=2983
+
+- Change the Requested File Type:
+	- Switching the file type of the requested file sometimes leads the server to process the authorization differently. Applications might be flexible about how the user can identify information: they could allow users to either use IDs to reference a file or use the filename directly. But applications often fail to implement the same access controls for each method of reference. For example, applications commonly store information in the JSON file 
+type. Try adding the .json extension to the end of the request URL and see what happens. If this request is blocked by the server GET /get_receipt?receipt_id=2983 then try this one instead: GET /get_receipt?receipt_id=2983.json

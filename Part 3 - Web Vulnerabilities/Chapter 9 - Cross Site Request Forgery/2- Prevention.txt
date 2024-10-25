@@ -1,0 +1,25 @@
+- The best way to prevent CSRFs is to use CSRF tokens. Applications can embed these random and unpredictable strings in every form on their website, and browsers will send this string along with every state-changing request. When the request reaches the server, the server can validate the token to make sure the request indeed originated from its website.
+
+- This CSRF token should be unique for each session and/or HTML form so attackers can’t guess the token’s value and embed it on their websites. Tokens should have sufficient entropy so that they cannot be deduced by analyzing tokens across sessions.
+
+- The server generates random CSRF tokens and embeds correct CSRF tokens in forms on the legitimate site. Notice the new input field used to specify a CSRF token:
+
+<form method="POST" action="https://twitter.com/send_a_tweet">
+<input type="text" name="tweet_content" value="Hello world!">
+<input type="text" name="csrf_token" value="871caef0757a4ac9691aceb9aad8b65b">
+<input type="submit" value="Submit">
+</form>
+
+- Twitter’s server can require that the browser send the correct value of the csrf_token POST parameter along with the request for it to be successful. If the value of csrf_token is missing or incorrect, the server should see the request as fake and reject it. Here is the resulting POST request:
+POST /send_a_tweet
+Host: twitter.com
+Cookie: session_cookie=YOUR_TWITTER_SESSION_COOKIE
+(POST request body)
+tweet_content="Hello world!"&csrf_token=871caef0757a4ac9691aceb9aad8b65b
+
+- Besides implementing CSRF tokens to ensure the authenticity of requests, another way of protecting against CSRF is with SameSite cookies. The Set-Cookie header allows you to use several optional flags to protect your users’ cookies, one of which is the SameSite flag. When the SameSite flag on a cookie is set to Strict, the client’s browser won’t send the cookie during
+cross-site requests: Set-Cookie: PHPSESSID=UEhQU0VTU0lE; Max-Age=86400; Secure; HttpOnly; SameSite=Strict
+
+- Another possible setting for the SameSite flag is Lax, which tells the client’s browser to send a cookie only in requests that cause top-level navigation (when users actively click a link and navigate to the site). This setting ensures that users still have access to the resources on your site if the cross- site request is intentional. For example, if you navigate to Facebook from a third-party site, your Facebook logins will be sent. But if a third-party site initiates a POST request to Facebook or tries to embed the contents of Facebook within an iframe, cookies won’t be sent: Set-Cookie: PHPSESSID=UEhQU0VTU0lE; Max-Age=86400; Secure; HttpOnly; SameSite=Lax
+
+- Specifying the SameSite attribute is good protection against CSRF because both the Strict and Lax settings will prevent browsers from sending cookies on cross-site form POST or AJAX requests, and within iframes and image tags. This renders the classic CSRF hidden-form attack useless

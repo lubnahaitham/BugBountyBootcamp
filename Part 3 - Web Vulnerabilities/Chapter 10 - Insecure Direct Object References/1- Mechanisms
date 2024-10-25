@@ -1,0 +1,20 @@
+- They happen when the application grants direct access to a resource based on the user’s request, without validation.
+
+- it’s essentially a missing access control. IDORs happen when users can access resources that do not belong to them by directly referencing the object ID, object number, or filename.
+
+- IDORs are not just limited to reading other users’ information, either. You can also use them to edit data on another user’s behalf For example, let’s say that users can submit a POST request to change their password.
+The POST request must contain that user’s ID and new password, and they must direct the request to the /change_password endpoint:
+POST /change_password
+(POST request body)
+user_id=1234&new_password=12345
+
+- if the application doesn’t validate that the submitted user ID corresponds to the currently logged-in user, an attacker might be able to change someone else’s password by sending a user ID that doesn’t belong to them
+
+- IDORs can affect resources other than database objects. Another type of IDOR happens when applications reference a system file directly. For example, this request allows users to access a file they’ve uploaded: https://example.com/uploads?file=user1234-01.jpeg.
+
+- Since the value of the file parameter is user1234–01.jpeg, we can easily deduce that user-uploaded files follow the naming convention of USER_ID-FILE_NUMBER.FILE_EXTENSION. Therefore, another user’s uploaded files might be named user1233–01.jpeg. If the application doesn’t restrict users’ access to files that belong to others, an attacker could access anyone’s
+uploaded files by guessing the filenames, like this: https://example.com/uploads?file=user1233-01.jpeg.
+
+- A malicious user might even be able to read sensitive system files through this endpoint! For instance, /etc/shadow is a file on Unix systems used to keep track of user passwords
+
+- If you can read the file this way, through a URL like https://example.com/uploads?file=/PATH/TO/etc/shadow, then you’ve found a vulnerability! Attackers being able to read files outside the web root folder is also known as a path traversal attack, or directory traversal attack

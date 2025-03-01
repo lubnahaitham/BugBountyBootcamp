@@ -1,0 +1,12 @@
+Preventing XXEs is all about limiting the capabilities of an XML parser. First, because DTD processing is a requirement for XXE attacks, you should disable DTD processing on the XML parsers if possible. If it’s not possible to disable DTDs completely, you can disable external entities, parameter entities and inline DTDs (DTDs included in the XML document). And to prevent XXE-based DoS, you can limit the XML parser’s parse time and parse depth. You can also disable the expansion of entities entirely.
+
+The mechanisms for disabling DTD processing and configuring parser behavior vary based on the XML parser in use. For example, if you’re using the default PHP XML parser, you need to set libxml_disable_entity_loader to TRUE to disable the use of external entities. For more information on how to do it for your parser, consult the OWASP Cheat Sheet at https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md.
+
+Another path you can take is input validation. You could create an allowlist for user-supplied values that are passed into XML documents, or sanitize potentially hostile data within XML documents, headers, or nodes.
+
+Alternatively, you can use less complex data formats like JSON instead of XML whenever possible.
+
+Attackers exfiltrate data by making the application return data in an HTTP response. If the server takes XML input but does not return the XML document in an HTTP response, attackers can use blind XXEs to exfiltrate data instead. Blind XXEs steal data by having the target server make an outbound request to the attacker’s server with the stolen data. 
+
+To prevent blind XXEs, you can disallow outbound network traffic. Finally, you can routinely review your source code to detect and fix XXE vulnerabilities. And because many XXEs are introduced by an application’s dependencies instead of its custom source code, you should keep all dependencies in use by your application or by the underlying operating
+system up-to-date.

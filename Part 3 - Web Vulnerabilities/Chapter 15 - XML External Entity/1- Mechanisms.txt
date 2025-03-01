@@ -1,0 +1,48 @@
+What is Xml external entity (XXE)? it targets the xml parsers of an application. XXEs can be very impactful bugs, as they can lead to confidential information disclosure, SSRF
+
+- Extensible Markup Language (XML) is designed for storing and transporting data. This markup language allows developers to define and represent arbitrary data structures in a text format using a tree-like structure like that of HTML. For example, web applications commonly use XML to transport identity information in Security Assertion Markup Language (SAML) authentication. The XML might look like this:
+<saml:AttributeStatement>
+ <saml:Attribute Name="username">
+ <saml:AttributeValue>
+ vickieli
+ </saml:AttributeValue>
+ </saml:Attribute>
+</saml:AttributeStatement>
+
+- Notice here that unlike HTML, XML has user-defined tag names that let you structure the XML document freely. The XML format is widely used in various functionalities of web applications, including authentication, file transfers, and image uploads, or simply to transfer HTTP data from the client to the server and back. XML documents can contain a document type definition (DTD), which defines the structure of an XML document and the data it contains. These 
+DTDs can be loaded from external sources or declared in the document itself within a DOCTYPE tag
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+ <!ENTITY file "Hello!">
+]>
+<example>&file;</example>
+
+- XML entities work like variables in programming languages: any time you reference this entity by using the syntax &file, the XML document will load the value of file in its place
+
+- XML documents can also use external entities to access either local or remote content with a URL. If an entity’s value is preceded by a SYSTEM keyword, the entity is an external entity, and its value will be loaded from the URL.
+
+- EX: <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+ <!ENTITY file SYSTEM "file:///example.txt">
+]>
+<example>&file;</example>
+
+- External entities can also load resources from the internet. This DTD declares an external entity named file that points to the home page of example.com:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+ <!ENTITY file SYSTEM "http://example.com/index.html">
+]>
+<example>&file;</example>
+
+- If the parser allows user-defined DTDs or user input within the DTD and is configured to parse and evaluate the DTD, attackers can declare their own external entities to achieve malicious results
+
+- For example, let’s say a web application lets users upload their own XML document. The application will parse and display the document back to the user. A malicious user can upload a document like this one to read the /etc/shadow file on the server, which is where Unix systems store usernames and their encrypted passwords:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE example [
+1 <!ENTITY file SYSTEM "file:///etc/shadow">
+]>
+<example>&file;</example>
+
+- Parsing this XML file will cause the server to return the contents of /etc/shadow because the XML file includes /etc/shadow via an external entity 
+
+- Attacks like these are called XML external entity attacks, or XXEs. Applications are vulnerable to XXEs when the application accepts user supplied XML input or passes user input into DTDs, which is then parsed by an XML parser, and that XML parser reads local system files or sends internal or outbound requests specified in the DTD

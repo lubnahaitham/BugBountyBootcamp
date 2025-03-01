@@ -1,3 +1,5 @@
 # BugBountyBootcamp
- 
- I hope you like it
+
+ This repository contains a comprehensive summary and key points of the book
+
+ I hope You Like It

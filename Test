@@ -1,0 +1,237 @@
+mail.alexbank.com
+qr.alexbank.com
+internetbanking.alexbank.com
+sfbexternal.alexbank.com
+dialin.alexbank.com
+webconf.alexbank.com
+meet.alexbank.com
+www.okey.alexbank.com
+access.alexbank.com
+one.alexbank.com
+alexpress.alexbank.com
+lyncdiscover.alexbank.com
+www.alexmimdm.alexbank.com
+mdm.alexbank.com
+mobile.alexbank.com
+www.alexsentry.alexbank.com
+www.internetbanking.alexbank.com
+with.alexbank.com
+autodiscover.alexbank.com
+mail2.alexbank.com
+lyncpool.alexbank.com
+amlappcent.alexbank.com
+sip.alexbank.com
+mem.alexbank.com
+mail3.alexbank.com
+www.alexbank.com
+withma7fazty.alexbank.com
+alexbank.com
+alexmimdm.alexbank.com
+trc.alexbank.com
+ma7fazty.alexbank.com
+webmail.alexbank.com
+internetbankinguat.alexbank.com
+fatca.alexbank.com
+okey.alexbank.com
+wacweb.alexbank.com
+alexsentry.alexbank.com
+
+------------------------------------------------------------------------------------
+dnsmap output:
+
+mail.alexbank.com
+IP address #1: 196.204.7.198
+IP address #2: 196.219.28.137
+
+mobile.alexbank.com
+IP address #1: 41.217.225.126
+
+qr.alexbank.com
+IP address #1: 54.146.32.163
+IP address #2: 3.95.100.208
+
+webmail.alexbank.com
+IP address #1: 196.219.28.136
+IP address #2: 196.204.7.197
+
+www.alexbank.com
+IP address #1: 193.227.213.245
+
+
+-----------------------------------------
+
+Subdominzer output:
+
+internetbanking.alexbank.com
+www.alexbank.com
+
+accessKeys=rspkr.accessKeys | https://cdn-eu.readspeaker.com/script/13345/webReader/webReader.js?pids=wr&noDefaultSkin=1
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+assetfinder output:
+
+www.alexbank.com
+webmail.alexbank.com
+autodiscover.alexbank.com
+alexbank.com
+okey.alexbank.com
+qr.alexbank.com
+internetbanking.alexbank.com
+one.alexbank.com
+mail.alexbank.com
+with.alexbank.com
+alexpress.alexbank.com
+alexmimdm.alexbank.com
+alexsentry.alexbank.com
+internetbankinguat.alexbank.com
+ma7fazty.alexbank.com
+mail2.alexbank.com
+mdm.alexbank.com
+mem.alexbank.com
+mobile.alexbank.com
+trc.alexbank.com
+withma7fazty.alexbank.com
+fatca.alexbank.com
+autodiscover.alexbank.com
+one.alexbank.com
+alexbank.com
+alexbank.com
+alexbank.com
+www.alexbank.com
+dialin.alexbank.com
+lyncdiscover.alexbank.com
+meet.alexbank.com
+sfbexternal.alexbank.com
+sip.alexbank.com
+wacweb.alexbank.com
+webconf.alexbank.com
+alexbank.com
+alexbank.com
+www.alexbank.com
+access.alexbank.com
+okey.alexbank.com
+www.okey.alexbank.com
+alexsentry.alexbank.com
+www.alexsentry.alexbank.com
+alexmimdm.alexbank.com
+www.alexmimdm.alexbank.com
+sip.alexbank.com
+webconf.alexbank.com
+www.internetbanking.alexbank.com
+www.okey.alexbank.com
+
+
+---------------------------------------------------------------------------------------------------------------
+
+amass output:
+
+alexbank.com (FQDN) --> a_record --> 193.227.213.245 (IPAddress)
+qr.alexbank.com (FQDN) --> cname_record --> custom-mn25ymg2qt-4.tapnscan.me (FQDN)
+sip.alexbank.com (FQDN) --> cname_record --> sipdir.online.lync.com (FQDN)
+alexsentry.alexbank.com (FQDN) --> a_record --> 196.204.7.201 (IPAddress)
+www.alexbank.com (FQDN) --> a_record --> 193.227.213.245 (IPAddress)
+ma7fazty.alexbank.com (FQDN) --> a_record --> 41.33.132.11 (IPAddress)
+withma7fazty.alexbank.com (FQDN) --> a_record --> 148.251.77.203 (IPAddress)
+mdm.alexbank.com (FQDN) --> a_record --> 41.187.88.155 (IPAddress)
+mdm.alexbank.com (FQDN) --> a_record --> 196.219.28.155 (IPAddress)
+193.227.212.0/22 (Netblock) --> contains --> 193.227.213.245 (IPAddress)
+148.251.0.0/16 (Netblock) --> contains --> 148.251.77.203 (IPAddress)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.201 (IPAddress)
+13253 (ASN) --> managed_by --> ISP-ASN4 (RIROrganization)
+13253 (ASN) --> announces --> 193.227.212.0/22 (Netblock)
+24940 (ASN) --> managed_by --> HETZNER-AS (RIROrganization)
+24940 (ASN) --> announces --> 148.251.0.0/16 (Netblock)
+24835 (ASN) --> managed_by --> RAYA-AS, EG (RIROrganization)
+24835 (ASN) --> announces --> 196.204.0.0/19 (Netblock)
+alexbank.com (FQDN) --> mx_record --> mail2.alexbank.com (FQDN)
+alexbank.com (FQDN) --> mx_record --> mail.alexbank.com (FQDN)
+alexbank.com (FQDN) --> ns_record --> dns1.mist-net.com (FQDN)
+alexbank.com (FQDN) --> ns_record --> dns4.mist-net.com (FQDN)
+alexbank.com (FQDN) --> ns_record --> dns2.mist-net.com (FQDN)
+mail.alexbank.com (FQDN) --> a_record --> 196.204.7.198 (IPAddress)
+mail.alexbank.com (FQDN) --> a_record --> 196.219.28.137 (IPAddress)
+alexmimdm.alexbank.com (FQDN) --> a_record --> 196.204.7.200 (IPAddress)
+trc.alexbank.com (FQDN) --> a_record --> 196.219.28.146 (IPAddress)
+trc.alexbank.com (FQDN) --> a_record --> 41.187.88.146 (IPAddress)
+with.alexbank.com (FQDN) --> cname_record --> ints-alexbank.goreply.net (FQDN)
+mem.alexbank.com (FQDN) --> a_record --> 196.219.28.156 (IPAddress)
+mem.alexbank.com (FQDN) --> a_record --> 41.187.88.152 (IPAddress)
+webmail.alexbank.com (FQDN) --> a_record --> 196.204.7.197 (IPAddress)
+webmail.alexbank.com (FQDN) --> a_record --> 196.219.28.136 (IPAddress)
+okey.alexbank.com (FQDN) --> a_record --> 196.204.7.232 (IPAddress)
+okey.alexbank.com (FQDN) --> a_record --> 41.33.141.54 (IPAddress)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.200 (IPAddress)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.198 (IPAddress)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.197 (IPAddress)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.232 (IPAddress)
+41.187.88.0/22 (Netblock) --> contains --> 41.187.88.155 (IPAddress)
+41.187.88.0/22 (Netblock) --> contains --> 41.187.88.146 (IPAddress)
+41.187.88.0/22 (Netblock) --> contains --> 41.187.88.152 (IPAddress)
+196.219.28.0/22 (Netblock) --> contains --> 196.219.28.155 (IPAddress)
+196.219.28.0/22 (Netblock) --> contains --> 196.219.28.137 (IPAddress)
+196.219.28.0/22 (Netblock) --> contains --> 196.219.28.146 (IPAddress)
+196.219.28.0/22 (Netblock) --> contains --> 196.219.28.156 (IPAddress)
+196.219.28.0/22 (Netblock) --> contains --> 196.219.28.136 (IPAddress)
+41.33.128.0/17 (Netblock) --> contains --> 41.33.132.11 (IPAddress)
+41.33.128.0/17 (Netblock) --> contains --> 41.33.141.54 (IPAddress)
+20928 (ASN) --> managed_by --> NOOR-AS (RIROrganization)
+20928 (ASN) --> announces --> 41.187.88.0/22 (Netblock)
+8452 (ASN) --> managed_by --> TE-AS TE-AS, EG (RIROrganization)
+8452 (ASN) --> announces --> 196.219.28.0/22 (Netblock)
+8452 (ASN) --> announces --> 41.33.128.0/17 (Netblock)
+mail2.alexbank.com (FQDN) --> a_record --> 196.204.7.199 (IPAddress)
+mail2.alexbank.com (FQDN) --> a_record --> 196.219.28.138 (IPAddress)
+dns4.mist-net.com (FQDN) --> a_record --> 92.205.232.153 (IPAddress)
+dns2.mist-net.com (FQDN) --> a_record --> 172.31.1.24 (IPAddress)
+dns2.mist-net.com (FQDN) --> a_record --> 41.222.168.6 (IPAddress)
+ints-alexbank.goreply.net (FQDN) --> a_record --> 35.227.208.68 (IPAddress)
+alexpress.alexbank.com (FQDN) --> a_record --> 41.33.141.51 (IPAddress)
+internetbanking.alexbank.com (FQDN) --> a_record --> 196.204.7.230 (IPAddress)
+internetbanking.alexbank.com (FQDN) --> a_record --> 41.33.141.52 (IPAddress)
+internetbankinguat.alexbank.com (FQDN) --> a_record --> 41.33.141.56 (IPAddress)
+autodiscover.alexbank.com (FQDN) --> a_record --> 196.219.28.136 (IPAddress)
+139.88.187.41.in-addr.arpa (FQDN) --> ptr_record --> alexmimdm.alexbank.com (FQDN)
+138.28.219.196.in-addr.arpa (FQDN) --> ptr_record --> mail2.alexbank.com (FQDN)
+138.88.187.41.in-addr.arpa (FQDN) --> ptr_record --> mail2.alexbank.com (FQDN)
+139.28.219.196.in-addr.arpa (FQDN) --> ptr_record --> mail3.alexbank.com (FQDN)
+134.88.187.41.in-addr.arpa (FQDN) --> ptr_record --> access.alexbank.com (FQDN)
+137.88.187.41.in-addr.arpa (FQDN) --> ptr_record --> mail.alexbank.com (FQDN)
+137.28.219.196.in-addr.arpa (FQDN) --> ptr_record --> mail.alexbank.com (FQDN)
+140.88.187.41.in-addr.arpa (FQDN) --> ptr_record --> alexsentry.alexbank.com (FQDN)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.230 (IPAddress)
+196.204.0.0/19 (Netblock) --> contains --> 196.204.7.199 (IPAddress)
+196.219.28.0/22 (Netblock) --> contains --> 196.219.28.138 (IPAddress)
+41.33.128.0/17 (Netblock) --> contains --> 41.33.141.51 (IPAddress)
+41.33.128.0/17 (Netblock) --> contains --> 41.33.141.52 (IPAddress)
+41.33.128.0/17 (Netblock) --> contains --> 41.33.141.56 (IPAddress)
+3.80.0.0/12 (Netblock) --> contains --> 3.95.100.208 (IPAddress)
+54.144.0.0/14 (Netblock) --> contains --> 54.146.32.163 (IPAddress)
+41.217.224.0/21 (Netblock) --> contains --> 41.217.225.126 (IPAddress)
+172.16.0.0/12 (Netblock) --> contains --> 172.31.1.24 (IPAddress)
+41.222.168.0/21 (Netblock) --> contains --> 41.222.168.6 (IPAddress)
+35.227.0.0/16 (Netblock) --> contains --> 35.227.208.68 (IPAddress)
+92.205.224.0/19 (Netblock) --> contains --> 92.205.232.153 (IPAddress)
+0 (ASN) --> managed_by --> Reserved Network Address Blocks (RIROrganization)
+0 (ASN) --> announces --> 172.16.0.0/12 (Netblock)
+14618 (ASN) --> managed_by --> AMAZON-AES - Amazon.com, Inc. (RIROrganization)
+14618 (ASN) --> announces --> 3.80.0.0/12 (Netblock)
+14618 (ASN) --> announces --> 54.144.0.0/14 (Netblock)
+396982 (ASN) --> managed_by --> GOOGLE-CLOUD-PLATFORM, US (RIROrganization)
+396982 (ASN) --> announces --> 35.227.0.0/16 (Netblock)
+24835 (ASN) --> managed_by --> AS24835 - Vodafone Data (RIROrganization)
+37031 (ASN) --> managed_by --> MIST- (RIROrganization)
+37031 (ASN) --> announces --> 41.217.224.0/21 (Netblock)
+37031 (ASN) --> announces --> 41.222.168.0/21 (Netblock)
+21499 (ASN) --> managed_by --> GODADDY-SXB, DE (RIROrganization)
+21499 (ASN) --> announces --> 92.205.224.0/19 (Netblock)
+dns1.mist-net.com (FQDN) --> a_record --> 41.222.168.5 (IPAddress)
+mobile.alexbank.com (FQDN) --> a_record --> 41.217.225.126 (IPAddress)
+one.alexbank.com (FQDN) --> a_record --> 196.204.7.197 (IPAddress)
+one.alexbank.com (FQDN) --> a_record --> 196.219.28.136 (IPAddress)
+45.225.217.41.in-addr.arpa (FQDN) --> ptr_record --> with.alexbank.com (FQDN)
+126.225.217.41.in-addr.arpa (FQDN) --> ptr_record --> mobile.alexbank.com (FQDN)
+136.88.187.41.in-addr.arpa (FQDN) --> ptr_record --> one.alexbank.com (FQDN)
+41.222.168.0/21 (Netblock) --> contains --> 41.222.168.5 (IPAddress)
+_http._tcp.alexbank.com (FQDN) --> srv_record --> one.alexbank.com (FQDN)
+
